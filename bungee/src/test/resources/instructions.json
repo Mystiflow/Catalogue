@@ -1,0 +1,30 @@
+{
+  "instructions": [
+    {
+      "name": "ClearAnnoyances",
+      "commands": [
+        {
+          "command": "weather clear",
+          "count": 1
+        },
+        {
+          "command": "time set day",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "name": "PiaPiaPianoSong",
+      "commands": [
+        {
+          "command": "say pia",
+          "count": 2
+        },
+        {
+          "command": "say piano",
+          "count": 3
+        }
+      ]
+    }
+  ]
+}

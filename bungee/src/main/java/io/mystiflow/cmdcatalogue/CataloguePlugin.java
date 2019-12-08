@@ -1,57 +1,61 @@
 package io.mystiflow.cmdcatalogue;
 
 import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import io.mystiflow.cmdcatalogue.api.Catalogue;
+import io.mystiflow.cmdcatalogue.api.Command;
+import io.mystiflow.cmdcatalogue.api.CommandGroup;
+import io.mystiflow.cmdcatalogue.command.CatalogueCommand;
+import io.mystiflow.cmdcatalogue.serialisation.CommandAdapter;
+import io.mystiflow.cmdcatalogue.serialisation.CommandScriptAdapter;
+import lombok.Getter;
+import net.md_5.bungee.api.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
 
-public class CataloguePlugin {
+public class CataloguePlugin extends Plugin {
 
-    private static final List<CommandInstruction> catalogue = new ArrayList<>();
+    @Getter
+    private Gson gson;
+    @Getter
+    private Catalogue catalogue;
 
-    public static void main(String[] args) {
-        Gson gson = new Gson()
+    @Override
+    public void onEnable() {
+        gson = new Gson()
                 .newBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(CommandInstruction.class, new CommandScriptAdapter())
+                .registerTypeAdapter(CommandGroup.class, new CommandScriptAdapter())
+                .registerTypeAdapter(Command.class, new CommandAdapter())
                 .create();
 
-        CommandInstruction instruction = CommandInstruction.builder()
-                .name("1223334444")
-                .command(new Command("say 1", 1))
-                .command(new Command("say 22", 2))
-                .command(new Command("say 333", 3))
-                .command(new Command("say 4444", 4))
-                .build();
+        loadCatalogue();
 
-        CommandInstruction instruction2 = CommandInstruction.builder()
-                .name("RebukeTheGloom")
-                .command(new Command("weather clear", 1))
-                .command(new Command("time set day", 1))
-                .build();
-
-        catalogue.add(instruction);
-        catalogue.add(instruction2);
-
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter Instruction");
-        String instructionName = scanner.next();
-        Optional<CommandInstruction> optionalCommandInstruction = getCommandInstruction(instructionName);
-        if (optionalCommandInstruction.isPresent()) {
-            CommandInstruction commandInstruction = optionalCommandInstruction.get();
-            for (Command command : commandInstruction.getCommands()) {
-                System.out.println("Executing " + command.getCommand() + " for count of " + command.getCount());
-            }
-        }
-
-        String json = gson.toJson(catalogue, Collection.class);
-        System.out.println(json);
+        getProxy().getPluginManager().registerCommand(this, new CatalogueCommand(this));
     }
 
-    public static Optional<CommandInstruction> getCommandInstruction(String name) {
-        return catalogue.stream().filter(commandInstruction -> commandInstruction.getName().equalsIgnoreCase(name)).findFirst();
+    private void loadCatalogue() {
+        if (getDataFolder().exists() || !getDataFolder().mkdir()) {
+            File file = new File(getDataFolder(), "instructions.json");
+            if (!file.exists()) {
+                try (InputStream in = getResourceAsStream(file.getName())) {
+                    Files.copy(in, file.toPath());
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
+                 JsonReader jsonReader = new JsonReader(reader)) {
+                catalogue = gson.fromJson(jsonReader, Catalogue.class);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }
