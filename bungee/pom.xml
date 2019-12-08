@@ -40,6 +40,12 @@
     <build>
         <resources>
             <resource>
+                <directory>${project.basedir}/../</directory>
+                <includes>
+                    <include>LICENSE</include>
+                </includes>
+            </resource>
+            <resource>
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.json</include>
