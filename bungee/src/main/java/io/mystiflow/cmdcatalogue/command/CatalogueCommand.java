@@ -29,26 +29,14 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                     return;
                 }
 
-                Optional<CommandGroup> optionalInstruction = plugin.getCatalogue().getInstructions()
-                        .stream()
-                        .filter(commandInstruction -> commandInstruction.getName().equalsIgnoreCase(args[1]))
-                        .findFirst();
+                Optional<CommandGroup> optionalInstruction = plugin.getCatalogue().getInstruction(args[1]);
 
                 if (!optionalInstruction.isPresent()) {
                     sender.sendMessage(ChatColor.RED + "Command instruction '" + args[1] + "' not found");
                     return;
                 }
 
-                CommandGroup instruction = optionalInstruction.get();
-
-                System.out.println(instruction.getCommands() + "A");
-                List<Command> commands = instruction.getCommands();
-                for (Command command : commands) {
-                    sender.sendMessage("Dispatching " + command.getCommand() + " " + command.getIterations() + " times");
-                    for (int i = 0; i < command.getIterations(); i++) {
-                        plugin.getProxy().getPluginManager().dispatchCommand(sender, command.getCommand());
-                    }
-                }
+                executeGroup(sender, optionalInstruction.get());
                 return;
             }
 
@@ -63,5 +51,20 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
         }
 
         sender.sendMessage(ChatColor.YELLOW + "/" + getName() + " <execute|list>");
+    }
+
+    private void executeGroup(CommandSender sender, CommandGroup group) {
+        List<Command> commands = group.getCommands();
+        for (Command command : commands) {
+            if (command.getType() == Command.Type.COMMAND) {
+                for (int i = 0; i < command.getIterations(); i++) {
+                    plugin.getProxy().getPluginManager().dispatchCommand(sender, command.getCommand());
+                }
+            } else if (command.getType() == Command.Type.GROUP) {
+                plugin.getCatalogue().getInstruction(command.getCommand()).ifPresent(commandGroup ->
+                        executeGroup(sender, commandGroup)
+                );
+            }
+        }
     }
 }

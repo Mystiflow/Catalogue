@@ -20,6 +20,7 @@ public class CommandAdapter implements JsonSerializer<Command>, JsonDeserializer
 
         return new Command(
                 object.get("command").getAsString(),
+                Command.Type.valueOf(object.get("type").getAsString()),
                 object.get("iterations").getAsInt()
         );
     }
@@ -28,6 +29,7 @@ public class CommandAdapter implements JsonSerializer<Command>, JsonDeserializer
     public JsonElement serialize(Command command, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty("command", command.getCommand());
+        object.addProperty("type", command.getType().name());
         object.addProperty("iterations", command.getIterations());
         return object;
     }

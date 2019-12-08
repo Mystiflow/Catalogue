@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Class to store and manage a list of instructions
@@ -20,4 +21,8 @@ public class Catalogue {
      */
     @Singular
     private final List<CommandGroup> instructions;
+
+    public Optional<CommandGroup> getInstruction(String name) {
+        return instructions.stream().filter(group -> group.getName().equalsIgnoreCase(name)).findAny();
+    }
 }
