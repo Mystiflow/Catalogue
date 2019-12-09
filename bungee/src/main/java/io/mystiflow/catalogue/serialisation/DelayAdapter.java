@@ -11,7 +11,7 @@ import io.mystiflow.catalogue.api.Delay;
 
 import java.lang.reflect.Type;
 
-public class DelayAdapter  implements JsonSerializer<Delay>, JsonDeserializer<Delay> {
+public class DelayAdapter implements JsonSerializer<Delay>, JsonDeserializer<Delay> {
 
     @Override
     public Delay deserialize(JsonElement element, Type type, JsonDeserializationContext context)

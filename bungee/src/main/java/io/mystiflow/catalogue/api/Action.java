@@ -19,10 +19,6 @@ public class Action {
         COMMAND
     }
 
-    public Type getType() {
-        return Type.valueOf(typeString);
-    }
-
     /**
      * The action to perform
      */
@@ -30,8 +26,7 @@ public class Action {
     /**
      * The type of action
      */
-    @SerializedName("type")
-    private final String typeString;
+    private final Type type;
     /**
      * The amount of times to execute this action
      */

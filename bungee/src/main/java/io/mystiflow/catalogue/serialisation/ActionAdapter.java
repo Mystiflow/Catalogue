@@ -21,7 +21,7 @@ public class ActionAdapter implements JsonSerializer<Action>, JsonDeserializer<A
 
         Action action = new Action(
                 object.get("action").getAsString(),
-                object.get("type").getAsString(),
+                Action.Type.valueOf(object.get("type").getAsString()),
                 object.get("iterations").getAsInt()
         );
         if (object.has("delay")) {
@@ -34,7 +34,7 @@ public class ActionAdapter implements JsonSerializer<Action>, JsonDeserializer<A
     public JsonElement serialize(Action action, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty("action", action.getAction());
-        object.addProperty("type", action.getTypeString());
+        object.addProperty("type", action.getType().name());
         object.addProperty("iterations", action.getIterations());
         if (action.getDelay() != null) {
             object.add("delay", context.serialize(action.getDelay(), Delay.class));

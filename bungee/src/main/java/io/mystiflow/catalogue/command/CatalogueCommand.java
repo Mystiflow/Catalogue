@@ -3,11 +3,13 @@ package io.mystiflow.catalogue.command;
 import com.google.common.base.Joiner;
 import io.mystiflow.catalogue.CataloguePlugin;
 import io.mystiflow.catalogue.api.Action;
+import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.Delay;
 import io.mystiflow.catalogue.api.Message;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -38,7 +40,7 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                     return;
                 }
 
-                executeMessage(sender, optionalMessage.get());
+                execute(sender, optionalMessage.get());
                 return;
             }
 
@@ -51,17 +53,31 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                 return;
             }
 
+            if (args[0].equalsIgnoreCase("save")) {
+                try {
+                    plugin.saveCatalogue();
+                    sender.sendMessage(ChatColor.YELLOW + "Saved catalogue to config");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+                return;
+            }
+
             if (args[0].equalsIgnoreCase("reload")) {
-                plugin.reloadCatalogue();
-                sender.sendMessage(ChatColor.YELLOW + "Reloaded catalogue from config");
+                try {
+                    plugin.reloadCatalogue();
+                    sender.sendMessage(ChatColor.YELLOW + "Reloaded catalogue to config");
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
                 return;
             }
         }
 
-        sender.sendMessage(ChatColor.YELLOW + "/" + getName() + " <execute|list|reload>");
+        sender.sendMessage(ChatColor.YELLOW + "/" + getName() + " <execute|list|reload|save>");
     }
 
-    private void executeMessage(CommandSender sender, Message message) {
+    private void execute(CommandSender sender, Message message) {
         List<Action> actions = message.getActions();
         for (Action action : actions) {
             Runnable runnable = () -> {
@@ -73,7 +89,7 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                     plugin.getCatalogue().getMessage(action.getAction()).ifPresent(message1 ->
                             {
                                 for (int i = 0; i < action.getIterations(); i++) {
-                                    executeMessage(sender, message1);
+                                    execute(sender, message1);
                                 }
                             }
                     );

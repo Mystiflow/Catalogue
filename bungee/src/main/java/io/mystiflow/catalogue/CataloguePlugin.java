@@ -2,7 +2,6 @@ package io.mystiflow.catalogue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
 import io.mystiflow.catalogue.api.Action;
 import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.Delay;
@@ -15,23 +14,25 @@ import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class CataloguePlugin extends Plugin {
 
     @Getter
+    private static CataloguePlugin plugin;
+    @Getter
     private Gson gson;
     @Getter
     private Catalogue catalogue;
+    private File catalogueFile;
 
     @Override
     public void onEnable() {
+        CataloguePlugin.plugin = this;
+
         gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Message.class, new MessageAdapter())
@@ -39,39 +40,39 @@ public class CataloguePlugin extends Plugin {
                 .registerTypeAdapter(Delay.class, new DelayAdapter())
                 .create();
 
-        reloadCatalogue();
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdir();
+        }
 
-        getProxy().getPluginManager().registerCommand(this, new CatalogueCommand(this));
-    }
+        catalogueFile = new File(getDataFolder(), "messages.json");
 
-    public void reloadCatalogue() {
-        if (getDataFolder().exists() || !getDataFolder().mkdir()) {
-            File file = new File(getDataFolder(), "messages.json");
-            if (!file.exists()) {
-                try (InputStream in = getResourceAsStream(file.getName())) {
-                    Files.copy(in, file.toPath());
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
-                 JsonReader jsonReader = new JsonReader(reader)) {
-                catalogue = gson.fromJson(jsonReader, Catalogue.class);
+        // Copy file from JAR to plugin folder
+        if (!catalogueFile.exists()) {
+            try (InputStream in = getResourceAsStream(catalogueFile.getName())) {
+                Files.copy(in, catalogueFile.toPath());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-    }
-
-    public void saveCatalogue() {
-        File file = new File(getDataFolder(), "messages.json");
         try {
-            try (Writer writer = new FileWriter(file)) {
-                gson.toJson(catalogue, writer);
-            }
+            catalogue = Catalogue.load(catalogueFile);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
+        getProxy().getPluginManager().registerCommand(this, new CatalogueCommand(this));
+    }
+
+    @Override
+    public void onDisable() {
+        CataloguePlugin.plugin = null;
+    }
+
+    public void reloadCatalogue() throws IOException {
+        catalogue = Catalogue.load(catalogueFile);
+    }
+
+    public void saveCatalogue() throws IOException {
+        catalogue.save(catalogueFile);
     }
 }
