@@ -64,7 +64,6 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
     private void executeMessage(CommandSender sender, Message group) {
         List<Action> actions = group.getActions();
         for (Action action : actions) {
-
             Runnable runnable = () -> {
                 if (action.getType() == Action.Type.COMMAND) {
                     for (int i = 0; i < action.getIterations(); i++) {
@@ -86,7 +85,7 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                 runnable.run();
             } else {
                 plugin.getProxy().getScheduler().schedule(
-                        plugin, runnable, delay.getDelay(), delay.getRepeatDelay(), TimeUnit.MILLISECONDS
+                        plugin, runnable, delay.getDelay() * 50L, delay.getRepeatDelay() * 50L, TimeUnit.MILLISECONDS
                 );
             }
         }

@@ -18,9 +18,10 @@ public class DelayAdapter  implements JsonSerializer<Delay>, JsonDeserializer<De
             throws JsonParseException {
         JsonObject object = element.getAsJsonObject();
 
-        return new Delay(
-                object.get("delay").getAsLong(), object.get("repeatDelay").getAsLong()
-        );
+        return Delay.builder()
+                .delay(object.get("delay").getAsLong())
+                .repeatDelay(object.get("repeatDelay").getAsLong())
+                .build();
     }
 
     @Override

@@ -39,7 +39,20 @@
           "iterations": 5
         }
       ]
+    },
+    {
+      "name": "FrequentGreet",
+      "actions": [
+        {
+          "action": "alert hello",
+          "type": "COMMAND",
+          "iterations": 1,
+          "delay": {
+            "delay": 100,
+            "repeatDelay": 100
+          }
+        }
+      ]
     }
   ]
 }
-

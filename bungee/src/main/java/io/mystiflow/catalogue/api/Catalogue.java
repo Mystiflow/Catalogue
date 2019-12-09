@@ -2,7 +2,6 @@ package io.mystiflow.catalogue.api;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 
 import java.util.List;

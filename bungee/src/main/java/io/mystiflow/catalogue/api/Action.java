@@ -1,6 +1,7 @@
 package io.mystiflow.catalogue.api;
 
 import com.google.gson.annotations.SerializedName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Data
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Action {
 
     public enum Type {
