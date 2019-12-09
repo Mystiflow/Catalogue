@@ -1,10 +1,10 @@
-package io.mystiflow.cmdcatalogue;
+package io.mystiflow.catalogue;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import io.mystiflow.cmdcatalogue.api.Catalogue;
-import io.mystiflow.cmdcatalogue.api.CommandGroup;
-import io.mystiflow.cmdcatalogue.serialisation.CommandScriptAdapter;
+import io.mystiflow.catalogue.api.Catalogue;
+import io.mystiflow.catalogue.api.Message;
+import io.mystiflow.catalogue.serialisation.MessageAdapter;
 
 import java.io.InputStreamReader;
 
@@ -24,7 +24,7 @@ public class CatalogueTest {
         gson = new Gson()
                 .newBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(CommandGroup.class, new CommandScriptAdapter())
+                .registerTypeAdapter(Message.class, new MessageAdapter())
                 .create();
 
         loadCatalogue();

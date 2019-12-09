@@ -1,13 +1,13 @@
-package io.mystiflow.cmdcatalogue;
+package io.mystiflow.catalogue;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import io.mystiflow.cmdcatalogue.api.Catalogue;
-import io.mystiflow.cmdcatalogue.api.Command;
-import io.mystiflow.cmdcatalogue.api.CommandGroup;
-import io.mystiflow.cmdcatalogue.command.CatalogueCommand;
-import io.mystiflow.cmdcatalogue.serialisation.CommandAdapter;
-import io.mystiflow.cmdcatalogue.serialisation.CommandScriptAdapter;
+import io.mystiflow.catalogue.api.Catalogue;
+import io.mystiflow.catalogue.api.Action;
+import io.mystiflow.catalogue.api.Message;
+import io.mystiflow.catalogue.command.CatalogueCommand;
+import io.mystiflow.catalogue.serialisation.ActionAdapter;
+import io.mystiflow.catalogue.serialisation.MessageAdapter;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -30,18 +30,18 @@ public class CataloguePlugin extends Plugin {
         gson = new Gson()
                 .newBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(CommandGroup.class, new CommandScriptAdapter())
-                .registerTypeAdapter(Command.class, new CommandAdapter())
+                .registerTypeAdapter(Message.class, new MessageAdapter())
+                .registerTypeAdapter(Action.class, new ActionAdapter())
                 .create();
 
-        loadCatalogue();
+        reloadCatalogue();
 
         getProxy().getPluginManager().registerCommand(this, new CatalogueCommand(this));
     }
 
-    private void loadCatalogue() {
+    public void reloadCatalogue() {
         if (getDataFolder().exists() || !getDataFolder().mkdir()) {
-            File file = new File(getDataFolder(), "instructions.json");
+            File file = new File(getDataFolder(), "messages.json");
             if (!file.exists()) {
                 try (InputStream in = getResourceAsStream(file.getName())) {
                     Files.copy(in, file.toPath());

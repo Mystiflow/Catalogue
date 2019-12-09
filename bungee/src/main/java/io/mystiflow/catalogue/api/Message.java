@@ -1,4 +1,4 @@
-package io.mystiflow.cmdcatalogue.api;
+package io.mystiflow.catalogue.api;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,11 +8,11 @@ import lombok.Singular;
 import java.util.List;
 
 /**
- * Set of instructions for running {@link Command}s.
+ * Set of instructions for running {@link Action}s.
  */
 @Builder
 @Data
-public class CommandGroup {
+public class Message {
 
     /**
      * The name of this group
@@ -20,8 +20,8 @@ public class CommandGroup {
     @NonNull
     private final String name;
     /**
-     * The commands to execute
+     * The actions to execute
      */
     @Singular
-    private final List<Command> commands;
+    private final List<Action> actions;
 }

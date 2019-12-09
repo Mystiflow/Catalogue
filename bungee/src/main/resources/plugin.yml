@@ -1,4 +1,4 @@
-name: CmdCatalogue
+name: Catalogue
 version: 1.0-SNAPSHOT
-main: io.mystiflow.cmdcatalogue.CataloguePlugin
+main: io.mystiflow.catalogue.CataloguePlugin
 author: Mystiflow

@@ -1,19 +1,20 @@
-package io.mystiflow.cmdcatalogue.api;
+package io.mystiflow.catalogue.api;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * Information about a command to use for an {@link CommandGroup}
+ * Information about a action to use for an {@link Message}
  */
 @Data
 @AllArgsConstructor
-public class Command {
+public class Action {
 
     public enum Type {
 
-        GROUP, COMMAND
+        GROUP,
+        COMMAND
     }
 
     public Type getType() {
@@ -21,9 +22,9 @@ public class Command {
     }
 
     /**
-     * The command to execute
+     * The action to perform
      */
-    private final String command;
+    private final String action;
     /**
      * The type of command
      */

@@ -1,15 +1,15 @@
 {
-  "instructions": [
+  "messages": [
     {
       "name": "ClearAnnoyances",
-      "commands": [
+      "actions": [
         {
-          "command": "weather clear",
+          "action": "weather clear",
           "type": "COMMAND",
           "iterations": 1
         },
         {
-          "command": "time set day",
+          "action": "time set day",
           "type": "COMMAND",
           "iterations": 1
         }
@@ -17,18 +17,29 @@
     },
     {
       "name": "PiaPiaPianoSong",
-      "commands": [
+      "actions": [
         {
-          "command": "say pia",
+          "action": "alert pia",
           "type": "COMMAND",
           "iterations": 2
         },
         {
-          "command": "say piano",
+          "action": "alert piano",
           "type": "COMMAND",
           "iterations": 3
+        }
+      ]
+    },
+    {
+      "name": "Piahhh",
+      "actions": [
+        {
+          "action": "PiaPiaPianoSong",
+          "type": "GROUP",
+          "iterations": 5
         }
       ]
     }
   ]
 }
+
