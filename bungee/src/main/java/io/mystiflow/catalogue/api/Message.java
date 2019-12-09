@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Set of instructions for running {@link Action}s.
  */
-@Builder
 @Data
+@Builder(builderClassName = "Builder")
 public class Message {
 
     /**

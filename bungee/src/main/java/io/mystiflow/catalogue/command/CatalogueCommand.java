@@ -3,12 +3,14 @@ package io.mystiflow.catalogue.command;
 import com.google.common.base.Joiner;
 import io.mystiflow.catalogue.CataloguePlugin;
 import io.mystiflow.catalogue.api.Action;
+import io.mystiflow.catalogue.api.Delay;
 import io.mystiflow.catalogue.api.Message;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
@@ -62,17 +64,28 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
     private void executeMessage(CommandSender sender, Message group) {
         List<Action> actions = group.getActions();
         for (Action action : actions) {
-            if (action.getType() == Action.Type.COMMAND) {
-                for (int i = 0; i < action.getIterations(); i++) {
-                    plugin.getProxy().getPluginManager().dispatchCommand(sender, action.getAction());
-                }
-            } else if (action.getType() == Action.Type.GROUP) {
-                plugin.getCatalogue().getMessage(action.getAction()).ifPresent(commandGroup ->
-                        {
-                            for (int i = 0; i < action.getIterations(); i++) {
-                                executeMessage(sender, commandGroup);
+            Runnable runnable = () -> {
+                if (action.getType() == Action.Type.COMMAND) {
+                    for (int i = 0; i < action.getIterations(); i++) {
+                        plugin.getProxy().getPluginManager().dispatchCommand(sender, action.getAction());
+                    }
+                } else if (action.getType() == Action.Type.GROUP) {
+                    plugin.getCatalogue().getMessage(action.getAction()).ifPresent(commandGroup ->
+                            {
+                                for (int i = 0; i < action.getIterations(); i++) {
+                                    executeMessage(sender, commandGroup);
+                                }
                             }
-                        }
+                    );
+                }
+            };
+
+            Delay delay = action.getDelay();
+            if (delay == null) {
+                runnable.run();
+            } else {
+                plugin.getProxy().getScheduler().schedule(
+                        plugin, runnable, delay.getDelay() * 50L, delay.getRepeatDelay() * 50L, TimeUnit.MILLISECONDS
                 );
             }
         }

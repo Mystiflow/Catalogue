@@ -3,11 +3,13 @@ package io.mystiflow.catalogue.api;
 import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Information about a action to use for an {@link Message}
  */
 @Data
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class Action {
 
@@ -26,12 +28,16 @@ public class Action {
      */
     private final String action;
     /**
-     * The type of command
+     * The type of action
      */
     @SerializedName("type")
     private final String typeString;
     /**
-     * The amount of times to execute this command
+     * The amount of times to execute this action
      */
     private final int iterations;
+    /**
+     * The delay to add to this action
+     */
+    private Delay delay;
 }

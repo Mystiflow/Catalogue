@@ -2,7 +2,6 @@ package io.mystiflow.catalogue.api;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Optional;
 /**
  * Class to store and manage the directory of messages
  */
-@RequiredArgsConstructor
 @Data
 @Builder(builderClassName = "Builder")
 public class Catalogue {
