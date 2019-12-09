@@ -1,6 +1,7 @@
 package io.mystiflow.catalogue;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import io.mystiflow.catalogue.api.Action;
 import io.mystiflow.catalogue.api.Catalogue;
@@ -31,8 +32,7 @@ public class CataloguePlugin extends Plugin {
 
     @Override
     public void onEnable() {
-        gson = new Gson()
-                .newBuilder()
+        gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Message.class, new MessageAdapter())
                 .registerTypeAdapter(Action.class, new ActionAdapter())

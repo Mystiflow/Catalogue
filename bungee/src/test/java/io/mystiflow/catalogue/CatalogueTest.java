@@ -1,6 +1,7 @@
 package io.mystiflow.catalogue;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.Message;
@@ -21,8 +22,7 @@ public class CatalogueTest {
      * Prints a JSON string with two basic command instructions
      */
     private static void createDefaultCatalogue() {
-        gson = new Gson()
-                .newBuilder()
+        gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Message.class, new MessageAdapter())
                 .create();
