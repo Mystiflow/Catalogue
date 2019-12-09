@@ -21,6 +21,6 @@ public class Catalogue {
     private final List<Message> messages;
 
     public Optional<Message> getMessage(String name) {
-        return messages.stream().filter(group -> group.getName().equalsIgnoreCase(name)).findAny();
+        return messages.stream().filter(message -> message.getName().equalsIgnoreCase(name)).findAny();
     }
 }

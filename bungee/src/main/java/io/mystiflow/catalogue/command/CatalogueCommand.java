@@ -61,19 +61,19 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
         sender.sendMessage(ChatColor.YELLOW + "/" + getName() + " <execute|list|reload>");
     }
 
-    private void executeMessage(CommandSender sender, Message group) {
-        List<Action> actions = group.getActions();
+    private void executeMessage(CommandSender sender, Message message) {
+        List<Action> actions = message.getActions();
         for (Action action : actions) {
             Runnable runnable = () -> {
                 if (action.getType() == Action.Type.COMMAND) {
                     for (int i = 0; i < action.getIterations(); i++) {
                         plugin.getProxy().getPluginManager().dispatchCommand(sender, action.getAction());
                     }
-                } else if (action.getType() == Action.Type.GROUP) {
-                    plugin.getCatalogue().getMessage(action.getAction()).ifPresent(commandGroup ->
+                } else if (action.getType() == Action.Type.ACTION) {
+                    plugin.getCatalogue().getMessage(action.getAction()).ifPresent(message1 ->
                             {
                                 for (int i = 0; i < action.getIterations(); i++) {
-                                    executeMessage(sender, commandGroup);
+                                    executeMessage(sender, message1);
                                 }
                             }
                     );

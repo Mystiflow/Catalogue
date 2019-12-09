@@ -15,7 +15,7 @@ public class Action {
 
     public enum Type {
 
-        GROUP,
+        ACTION,
         COMMAND
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
 public class Message {
 
     /**
-     * The name of this group
+     * The name of this message
      */
     @NonNull
     private final String name;
