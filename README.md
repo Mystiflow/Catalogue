@@ -23,3 +23,5 @@ Add message to your 'messages.json' file:
     },
 ```
 With the following message registered, executing the command ```/bcatalogue execute ClearAnnoyances``` in game will clear the weather and make the time day.
+
+[![Build Status](https://travis-ci.org/Mystiflow/Catalogue.svg?branch=master)](https://travis-ci.org/Mystiflow/Catalogue)
