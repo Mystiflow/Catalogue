@@ -21,11 +21,18 @@ public class MessageAdapter implements JsonSerializer<Message>, JsonDeserializer
             throws JsonParseException {
         JsonObject object = element.getAsJsonObject();
 
-        return Message.builder()
+        Message message = Message.builder()
                 .name(object.get("name").getAsString())
                 .actions(context.deserialize(object.get("actions"), new TypeToken<List<Action>>() {
                 }.getType()))
                 .build();
+
+        if (message.getActions().stream()
+                .anyMatch(action -> action.getType() == Action.Type.MESSAGE && action.getAction().equals(message.getName()))) {
+            throw new JsonParseException("Message '" + message.getName() + "' has itself as an action");
+        }
+
+        return message;
     }
 
     @Override

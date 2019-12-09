@@ -69,7 +69,7 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                     for (int i = 0; i < action.getIterations(); i++) {
                         plugin.getProxy().getPluginManager().dispatchCommand(sender, action.getAction());
                     }
-                } else if (action.getType() == Action.Type.ACTION) {
+                } else if (action.getType() == Action.Type.MESSAGE) {
                     plugin.getCatalogue().getMessage(action.getAction()).ifPresent(message1 ->
                             {
                                 for (int i = 0; i < action.getIterations(); i++) {
