@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.Action;
+import io.mystiflow.catalogue.api.Delay;
 import io.mystiflow.catalogue.api.Message;
 import io.mystiflow.catalogue.command.CatalogueCommand;
 import io.mystiflow.catalogue.serialisation.ActionAdapter;
+import io.mystiflow.catalogue.serialisation.DelayAdapter;
 import io.mystiflow.catalogue.serialisation.MessageAdapter;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -32,6 +34,7 @@ public class CataloguePlugin extends Plugin {
                 .setPrettyPrinting()
                 .registerTypeAdapter(Message.class, new MessageAdapter())
                 .registerTypeAdapter(Action.class, new ActionAdapter())
+                .registerTypeAdapter(Delay.class, new DelayAdapter())
                 .create();
 
         reloadCatalogue();

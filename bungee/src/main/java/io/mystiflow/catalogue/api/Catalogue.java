@@ -11,7 +11,6 @@ import java.util.Optional;
 /**
  * Class to store and manage the directory of messages
  */
-@RequiredArgsConstructor
 @Data
 @Builder(builderClassName = "Builder")
 public class Catalogue {
