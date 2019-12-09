@@ -1,9 +1,8 @@
-package io.mystiflow.catalogue.command;
+package io.mystiflow.catalogue;
 
 import com.google.common.base.Joiner;
 import io.mystiflow.catalogue.CataloguePlugin;
 import io.mystiflow.catalogue.api.Action;
-import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.Delay;
 import io.mystiflow.catalogue.api.Message;
 import net.md_5.bungee.api.ChatColor;
@@ -77,6 +76,11 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
         sender.sendMessage(ChatColor.YELLOW + "/" + getName() + " <execute|list|reload|save>");
     }
 
+    private void inform(CommandSender sender, Action action) {
+        sender.sendMessage(ChatColor.BLUE + "Executing '" + action.getType().name() + ":" + action.getAction()
+                + " for " + action.getIterations() + " iterations");
+    }
+
     private void execute(CommandSender sender, Message message) {
         List<Action> actions = message.getActions();
         for (Action action : actions) {
@@ -85,9 +89,11 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                     for (int i = 0; i < action.getIterations(); i++) {
                         plugin.getProxy().getPluginManager().dispatchCommand(sender, action.getAction());
                     }
+                    inform(sender, action);
                 } else if (action.getType() == Action.Type.MESSAGE) {
                     plugin.getCatalogue().getMessage(action.getAction()).ifPresent(message1 ->
                             {
+                                inform(sender, action);
                                 for (int i = 0; i < action.getIterations(); i++) {
                                     execute(sender, message1);
                                 }
@@ -96,14 +102,19 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                 }
             };
 
+            int taskID;
             Delay delay = action.getDelay();
             if (delay == null) {
                 runnable.run();
+                taskID = -1;
             } else {
-                plugin.getProxy().getScheduler().schedule(
+                taskID = plugin.getProxy().getScheduler().schedule(
                         plugin, runnable, delay.getDelay() * 50L, delay.getRepeatDelay() * 50L, TimeUnit.MILLISECONDS
-                );
+                ).getId();
             }
+
+            Integer previousDelayId = action.getActiveDelays().put("$" + sender.getName(), taskID);
+            plugin.getProxy().getScheduler().cancel(previousDelayId);
         }
     }
 }

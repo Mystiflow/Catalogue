@@ -6,7 +6,6 @@ import io.mystiflow.catalogue.api.Action;
 import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.Delay;
 import io.mystiflow.catalogue.api.Message;
-import io.mystiflow.catalogue.command.CatalogueCommand;
 import io.mystiflow.catalogue.serialisation.ActionAdapter;
 import io.mystiflow.catalogue.serialisation.DelayAdapter;
 import io.mystiflow.catalogue.serialisation.MessageAdapter;
@@ -17,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 public class CataloguePlugin extends Plugin {
 
@@ -61,6 +59,7 @@ public class CataloguePlugin extends Plugin {
         }
 
         getProxy().getPluginManager().registerCommand(this, new CatalogueCommand(this));
+        getProxy().getPluginManager().registerListener(this, new CatalogueListener(this));
     }
 
     @Override
