@@ -5,10 +5,12 @@
       "commands": [
         {
           "command": "weather clear",
+          "type": "COMMAND",
           "iterations": 1
         },
         {
           "command": "time set day",
+          "type": "COMMAND",
           "iterations": 1
         }
       ]
@@ -18,10 +20,12 @@
       "commands": [
         {
           "command": "say pia",
+          "type": "COMMAND",
           "iterations": 2
         },
         {
           "command": "say piano",
+          "type": "COMMAND",
           "iterations": 3
         }
       ]

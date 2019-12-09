@@ -1,5 +1,6 @@
 package io.mystiflow.cmdcatalogue.api;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,6 +16,10 @@ public class Command {
         GROUP, COMMAND
     }
 
+    public Type getType() {
+        return Type.valueOf(typeString);
+    }
+
     /**
      * The command to execute
      */
@@ -22,7 +27,8 @@ public class Command {
     /**
      * The type of command
      */
-    private final Type type;
+    @SerializedName("type")
+    private final String typeString;
     /**
      * The amount of times to execute this command
      */
