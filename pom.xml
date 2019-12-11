@@ -21,4 +21,18 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <plugin.name>catalogue</plugin.name>
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Mystiflow Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/mystiflow/catalogue</url>
+        </repository>
+    </distributionManagement>
+
+    <scm>
+        <url>https://github.com/mystiflow/catalogue</url>
+        <connection>scm:git:git://github.com/mystiflow/catalogue.git</connection>
+        <developerConnection>scm:git:git@github.com:mystiflow/catalogue.git</developerConnection>
+    </scm>
 </project>
