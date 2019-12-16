@@ -31,17 +31,4 @@ public class Catalogue {
     public Optional<Message> getMessage(String name) {
         return messages.stream().filter(message -> message.getName().equalsIgnoreCase(name)).findAny();
     }
-
-    public static Catalogue load(File file) throws IOException {
-        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(file));
-             JsonReader jsonReader = new JsonReader(reader)) {
-            return CataloguePlugin.getPlugin().getGson().fromJson(jsonReader, Catalogue.class);
-        }
-    }
-
-    public void save(File file) throws IOException {
-        try (Writer writer = new FileWriter(file)) {
-            CataloguePlugin.getPlugin().getGson().toJson(this, writer);
-        }
-    }
 }

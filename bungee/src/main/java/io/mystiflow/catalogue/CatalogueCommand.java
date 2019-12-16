@@ -54,7 +54,7 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
 
             if (args[0].equalsIgnoreCase("save")) {
                 try {
-                    plugin.saveCatalogue();
+                    plugin.getDefaultLoader().save();
                     sender.sendMessage(ChatColor.YELLOW + "Saved catalogue to config");
                 } catch (IOException ex) {
                     ex.printStackTrace();
@@ -64,7 +64,7 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
 
             if (args[0].equalsIgnoreCase("reload")) {
                 try {
-                    plugin.reloadCatalogue();
+                    plugin.getDefaultLoader().load();
                     sender.sendMessage(ChatColor.YELLOW + "Reloaded catalogue to config");
                 } catch (IOException ex) {
                     ex.printStackTrace();

@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.mystiflow.catalogue.api.Action;
 import io.mystiflow.catalogue.api.Catalogue;
+import io.mystiflow.catalogue.api.CatalogueLoader;
 import io.mystiflow.catalogue.api.Delay;
 import io.mystiflow.catalogue.api.Message;
+import io.mystiflow.catalogue.loader.JsonCatalogueLoader;
 import io.mystiflow.catalogue.serialisation.ActionAdapter;
 import io.mystiflow.catalogue.serialisation.DelayAdapter;
 import io.mystiflow.catalogue.serialisation.MessageAdapter;
@@ -21,6 +23,8 @@ public class CataloguePlugin extends Plugin {
 
     @Getter
     private static CataloguePlugin plugin;
+    @Getter
+    private CatalogueLoader defaultLoader;
     @Getter
     private Gson gson;
     @Getter
@@ -38,6 +42,7 @@ public class CataloguePlugin extends Plugin {
                 .registerTypeAdapter(Delay.class, new DelayAdapter())
                 .create();
 
+
         if (!getDataFolder().exists()) {
             getDataFolder().mkdir();
         }
@@ -52,8 +57,9 @@ public class CataloguePlugin extends Plugin {
                 ex.printStackTrace();
             }
         }
+        defaultLoader = new JsonCatalogueLoader(catalogueFile);
         try {
-            catalogue = Catalogue.load(catalogueFile);
+            catalogue = defaultLoader.load();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -65,13 +71,5 @@ public class CataloguePlugin extends Plugin {
     @Override
     public void onDisable() {
         CataloguePlugin.plugin = null;
-    }
-
-    public void reloadCatalogue() throws IOException {
-        catalogue = Catalogue.load(catalogueFile);
-    }
-
-    public void saveCatalogue() throws IOException {
-        catalogue.save(catalogueFile);
     }
 }
