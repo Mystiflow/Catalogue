@@ -1,0 +1,38 @@
+{
+  "actions": [
+    {
+      "name": "ClearWeather",
+      "action": "weather clear",
+      "iterations": 1
+    },
+    {
+      "name": "SetDay",
+      "action": "time set day",
+      "iterations": 1
+    },
+    {
+      "name": "PianoAlert1",
+      "action": "alert pia",
+      "iterations": 2
+    },
+    {
+      "name": "PianoAlert2",
+      "action": "alert piano",
+      "iterations": 3
+    }
+  ],
+  "messages": [
+    {
+      "name": "ClearAnnoyances",
+      "actions": [ "SetDay", "ClearWeather" ]
+    },
+    {
+      "name": "PiaPiaPianoSong",
+      "actions": [ "PianoAlert1", "PianoAlert2" ]
+    },
+    {
+      "name": "NoDistractionPiano",
+      "actions": [ "PiaPiaPianoSong", "ClearAnnoyances" ]
+    }
+  ]
+}

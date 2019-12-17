@@ -1,16 +1,8 @@
 package io.mystiflow.catalogue;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import io.mystiflow.catalogue.api.Action;
 import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.CatalogueLoader;
-import io.mystiflow.catalogue.api.Delay;
-import io.mystiflow.catalogue.api.Message;
-import io.mystiflow.catalogue.loader.JsonCatalogueLoader;
-import io.mystiflow.catalogue.serialisation.ActionAdapter;
-import io.mystiflow.catalogue.serialisation.DelayAdapter;
-import io.mystiflow.catalogue.serialisation.MessageAdapter;
+import io.mystiflow.catalogue.loader.json.JsonCatalogueLoader;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -26,38 +18,30 @@ public class CataloguePlugin extends Plugin {
     @Getter
     private CatalogueLoader defaultLoader;
     @Getter
-    private Gson gson;
-    @Getter
     private Catalogue catalogue;
-    private File catalogueFile;
 
     @Override
     public void onEnable() {
         CataloguePlugin.plugin = this;
 
-        gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .registerTypeAdapter(Message.class, new MessageAdapter())
-                .registerTypeAdapter(Action.class, new ActionAdapter())
-                .registerTypeAdapter(Delay.class, new DelayAdapter())
-                .create();
+
 
 
         if (!getDataFolder().exists()) {
             getDataFolder().mkdir();
         }
 
-        catalogueFile = new File(getDataFolder(), "messages.json");
+        File jsonCatalogueFile = new File(getDataFolder(), "catalogue.json");
 
         // Copy file from JAR to plugin folder
-        if (!catalogueFile.exists()) {
-            try (InputStream in = getResourceAsStream(catalogueFile.getName())) {
-                Files.copy(in, catalogueFile.toPath());
+        if (!jsonCatalogueFile.exists()) {
+            try (InputStream in = getResourceAsStream(jsonCatalogueFile.getName())) {
+                Files.copy(in, jsonCatalogueFile.toPath());
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-        defaultLoader = new JsonCatalogueLoader(catalogueFile);
+        defaultLoader = new JsonCatalogueLoader(jsonCatalogueFile);
         try {
             catalogue = defaultLoader.load();
         } catch (IOException ex) {

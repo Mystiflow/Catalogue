@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.Message;
-import io.mystiflow.catalogue.serialisation.MessageAdapter;
+import io.mystiflow.catalogue.loader.json.adapter.MessageAdapter;
 
 import java.io.InputStreamReader;
 

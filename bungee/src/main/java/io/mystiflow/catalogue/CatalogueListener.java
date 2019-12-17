@@ -26,8 +26,10 @@ public class CatalogueListener implements Listener {
 
     private void cancelDelays(ProxiedPlayer player) {
         plugin.getCatalogue().getMessages()
-                .forEach(message -> message.getActions()
-                        .forEach(action -> action.getActiveDelays().remove("$" + player.getName())));
-
+                .forEach(message -> message.getActionables().stream().forEach(actionName -> {
+                            plugin.getCatalogue().getAction(actionName).ifPresent(action ->
+                                    action.getActiveDelays().remove("$" + player.getName()));
+                        })
+                );
     }
 }

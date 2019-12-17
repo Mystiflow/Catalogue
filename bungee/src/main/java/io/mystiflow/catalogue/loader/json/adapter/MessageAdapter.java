@@ -1,4 +1,4 @@
-package io.mystiflow.catalogue.serialisation;
+package io.mystiflow.catalogue.loader.json.adapter;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonDeserializationContext;
@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import io.mystiflow.catalogue.api.Action;
 import io.mystiflow.catalogue.api.Message;
 
 import java.lang.reflect.Type;
@@ -21,25 +20,19 @@ public class MessageAdapter implements JsonSerializer<Message>, JsonDeserializer
             throws JsonParseException {
         JsonObject object = element.getAsJsonObject();
 
-        Message message = Message.builder()
-                .name(object.get("name").getAsString())
-                .actions(context.deserialize(object.get("actions"), new TypeToken<List<Action>>() {
-                }.getType()))
-                .build();
-
-        if (message.getActions().stream()
-                .anyMatch(action -> action.getType() == Action.Type.MESSAGE && action.getAction().equals(message.getName()))) {
-            throw new JsonParseException("Message '" + message.getName() + "' has itself as an action");
-        }
-
-        return message;
+        List<String> actionNames = context.deserialize(object.get("actions"), new TypeToken<List<String>>() {
+        }.getType());
+        return new Message(
+                object.get("name").getAsString(),
+                actionNames
+        );
     }
 
     @Override
     public JsonElement serialize(Message message, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty("name", message.getName());
-        object.add("actions", context.serialize(message.getActions()));
+        object.add("actions", context.serialize(message.getActionables()));
         return object;
     }
 }

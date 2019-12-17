@@ -1,4 +1,4 @@
-package io.mystiflow.catalogue.serialisation;
+package io.mystiflow.catalogue.loader.json.adapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -20,8 +20,8 @@ public class ActionAdapter implements JsonSerializer<Action>, JsonDeserializer<A
         JsonObject object = element.getAsJsonObject();
 
         Action action = new Action(
+                object.get("name").getAsString(),
                 object.get("action").getAsString(),
-                Action.Type.valueOf(object.get("type").getAsString()),
                 object.get("iterations").getAsInt()
         );
         if (object.has("delay")) {
@@ -33,8 +33,8 @@ public class ActionAdapter implements JsonSerializer<Action>, JsonDeserializer<A
     @Override
     public JsonElement serialize(Action action, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
+        object.addProperty("name", action.getName());
         object.addProperty("action", action.getAction());
-        object.addProperty("type", action.getType().name());
         object.addProperty("iterations", action.getIterations());
         if (action.getDelay() != null) {
             object.add("delay", context.serialize(action.getDelay(), Delay.class));

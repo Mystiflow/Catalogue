@@ -14,22 +14,16 @@ import java.util.Map;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Action {
+public class Action implements Actionable {
 
-    public enum Type {
-
-        MESSAGE,
-        COMMAND
-    }
-
+    /**
+     * The name of this action
+     */
+    private final String name;
     /**
      * The action to perform
      */
     private final String action;
-    /**
-     * The type of action
-     */
-    private final Type type;
     /**
      * The amount of times to execute this action
      */
