@@ -1,6 +1,5 @@
-package io.mystiflow.catalogue.loader.json.adapter;
+package io.mystiflow.catalogue.api.loader.json.adapter;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -8,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.google.gson.reflect.TypeToken;
 import io.mystiflow.catalogue.api.Message;
 
 import java.lang.reflect.Type;
@@ -32,7 +32,7 @@ public class MessageAdapter implements JsonSerializer<Message>, JsonDeserializer
     public JsonElement serialize(Message message, Type type, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty("name", message.getName());
-        object.add("actions", context.serialize(message.getActionables()));
+        object.add("actions", context.serialize(message.getActions()));
         return object;
     }
 }

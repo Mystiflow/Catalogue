@@ -2,7 +2,7 @@ package io.mystiflow.catalogue;
 
 import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.CatalogueLoader;
-import io.mystiflow.catalogue.loader.json.JsonCatalogueLoader;
+import io.mystiflow.catalogue.api.loader.json.JsonCatalogueLoader;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Plugin;
 
@@ -23,9 +23,6 @@ public class CataloguePlugin extends Plugin {
     @Override
     public void onEnable() {
         CataloguePlugin.plugin = this;
-
-
-
 
         if (!getDataFolder().exists()) {
             getDataFolder().mkdir();

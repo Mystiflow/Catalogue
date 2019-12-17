@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
+//TODO: Modularise this class
 public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
 
     private final CataloguePlugin plugin;
@@ -81,8 +83,16 @@ public class CatalogueCommand extends net.md_5.bungee.api.plugin.Command {
                 + " for " + action.getIterations() + " iterations");
     }
 
+    private static final Function<String, Actionable> ACTIONABLE_CONVERTER = new Function<String, Actionable>() {
+        @Override
+        public Actionable apply(String input) {
+            Actionable actionable = CataloguePlugin.getPlugin().getCatalogue().getAction(input).orElse(null);
+            if (actionable == null) actionable = CataloguePlugin.getPlugin().getCatalogue().getMessage(input).orElse(null);
+            return actionable;
+        }
+    };
     private void execute(CommandSender sender, Message message) {
-        List<Actionable> actions = message.getActionables();
+        List<Actionable> actions = message.getActions().stream().map(ACTIONABLE_CONVERTER).collect(Collectors.toList());
 
         for (Actionable actionable : actions) {
             if (actionable instanceof Message) {

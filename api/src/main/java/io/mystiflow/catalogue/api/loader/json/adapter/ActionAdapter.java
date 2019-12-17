@@ -1,4 +1,4 @@
-package io.mystiflow.catalogue.loader.json.adapter;
+package io.mystiflow.catalogue.api.loader.json.adapter;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

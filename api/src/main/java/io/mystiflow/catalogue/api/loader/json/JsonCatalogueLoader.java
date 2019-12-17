@@ -1,4 +1,4 @@
-package io.mystiflow.catalogue.loader.json;
+package io.mystiflow.catalogue.api.loader.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,9 +8,9 @@ import io.mystiflow.catalogue.api.Catalogue;
 import io.mystiflow.catalogue.api.CatalogueLoader;
 import io.mystiflow.catalogue.api.Delay;
 import io.mystiflow.catalogue.api.Message;
-import io.mystiflow.catalogue.loader.json.adapter.ActionAdapter;
-import io.mystiflow.catalogue.loader.json.adapter.DelayAdapter;
-import io.mystiflow.catalogue.loader.json.adapter.MessageAdapter;
+import io.mystiflow.catalogue.api.loader.json.adapter.ActionAdapter;
+import io.mystiflow.catalogue.api.loader.json.adapter.DelayAdapter;
+import io.mystiflow.catalogue.api.loader.json.adapter.MessageAdapter;
 
 import java.io.File;
 import java.io.FileInputStream;
